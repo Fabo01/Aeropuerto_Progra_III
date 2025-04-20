@@ -112,32 +112,32 @@ erDiagram
 
 ```mermaid
 flowchart TB
-    subgraph Presentación
-        API[API REST (FastAPI)]
-        GUI[GUI (CustomTkinter)]
+    subgraph Presentacion["Presentación"]
+        API["API REST (FastAPI)"]
+        GUI["GUI (CustomTkinter)"]
     end
     
-    subgraph Servicios
-        VS[VueloServicio]
-        LDES[ListaDobleEnlazadaServicio]
+    subgraph Servicios["Servicios"]
+        VS["VueloServicio"]
+        LDES["ListaDobleEnlazadaServicio"]
     end
     
-    subgraph Repositorios
-        VR[VueloRepo]
-        LDER[ListaDobleEnlazadaRepo]
+    subgraph Repositorios["Repositorios"]
+        VR["VueloRepo"]
+        LDER["ListaDobleEnlazadaRepo"]
     end
     
-    subgraph Modelos
-        V[Vuelo]
-        NDV[NodoDobleVuelos]
-        LDE[ListaDobleEnlazadaCentinelas]
+    subgraph Modelos["Modelos"]
+        V["Vuelo"]
+        NDV["NodoDobleVuelos"]
+        LDE["ListaDobleEnlazadaCentinelas"]
     end
     
-    subgraph BaseDeDatos
-        SQLite
+    subgraph BaseDeDatos["Base de Datos"]
+        SQLite["SQLite"]
     end
     
-    Presentación --> Servicios
+    Presentacion --> Servicios
     Servicios --> Repositorios
     Repositorios --> Modelos
     Modelos --> BaseDeDatos
@@ -166,16 +166,16 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TB
-    Sistema[Sistema Aeropuerto]
-    Frontend[Frontend (CTk)]
-    Backend[Backend (API)]
-    Vistas[Vistas]
-    Rutas[Rutas]
-    Servicios[Servicios]
-    Repositorios[Repositorios]
-    Modelos[Modelos]
-    TDA[TDA / Estr.]
-    BBDD[BBDD]
+    Sistema["Sistema Aeropuerto"]
+    Frontend["Frontend (CTk)"]
+    Backend["Backend (API)"]
+    Vistas["Vistas"]
+    Rutas["Rutas"]
+    Servicios["Servicios"]
+    Repositorios["Repositorios"]
+    Modelos["Modelos"]
+    TDA["TDA / Estr."]
+    BBDD["BBDD"]
     
     Sistema --> Frontend
     Sistema --> Backend
