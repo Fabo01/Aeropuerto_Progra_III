@@ -4,6 +4,35 @@
 
 El Tipo de Dato Abstracto (TDA) Lista Doblemente Enlazada es una estructura de datos que permite almacenar elementos y acceder a ellos de manera no secuencial, con la particularidad de que cada nodo mantiene referencias tanto al nodo anterior como al siguiente.
 
+```mermaid
+classDiagram
+    class NodoDoble {
+        -elemento
+        -anterior
+        -siguiente
+        +__init__(elemento, anterior, siguiente)
+    }
+    
+    class ListaDoblementeEnlazadaCentinela {
+        -_cabezon: NodoDoble
+        -_colon: NodoDoble
+        -_tamanio: int
+        +__init__()
+        +esta_vacia(): bool
+        +tamanio(): int
+        +primer_elemento()
+        +ultimo_elemento()
+        +insertar_al_frente(elemento)
+        +insertar_al_final(elemento)
+        +extraer_primero()
+        +extraer_ultimo()
+        -_insertar_entre(elemento, predecesor, sucesor)
+        -_eliminar_nodo(nodo)
+    }
+    
+    NodoDoble <--> ListaDoblementeEnlazadaCentinela
+```
+
 ## Componentes Clave
 
 ### 1. NodoDoble
@@ -428,4 +457,3 @@ def insertar_vuelo(lista_id: int, vuelo_id: int, db: Session = Depends(get_db)):
             status_code=400,
             detail=str(e)
         )
-```

@@ -44,6 +44,59 @@ class Vuelo(Base):
         return f"<Vuelo {self.numero_vuelo} {self.origen}->{self.destino} {self.estado}>"
 ```
 
+```mermaid
+classDiagram
+    class Vuelo {
+        +id: Integer
+        +numero_vuelo: String
+        +origen: String
+        +destino: String
+        +hora_salida: DateTime
+        +hora_llegada: DateTime
+        +prioridad: Integer
+        +estado: Enum
+        +emergencia: Boolean
+        +__repr__()
+    }
+    
+    class VueloDTO {
+        +id: Optional[int]
+        +numero_vuelo: str
+        +origen: str
+        +destino: str
+        +hora_salida: datetime
+        +hora_llegada: datetime
+        +prioridad: Optional[int]
+        +estado: Optional[str]
+        +emergencia: Optional[bool]
+    }
+    
+    class VueloCreadoDTO {
+        +numero_vuelo: str
+        +origen: str
+        +destino: str
+        +hora_salida: datetime
+        +hora_llegada: datetime
+        +prioridad: Optional[int]
+        +estado: Optional[str]
+        +emergencia: Optional[bool]
+    }
+    
+    class VueloServicio {
+        +__init__(db: Session)
+        +crear_vuelo(vuelo_dto)
+        +obtener_vuelos()
+        +obtener_vuelo_por_id(vuelo_id)
+        +actualizar_vuelo(vuelo_id, vuelo_dto)
+        +vuelo_esta_en_lista(vuelo_id)
+        +eliminar_vuelo(vuelo_id)
+    }
+    
+    Vuelo <|-- VueloDTO
+    VueloDTO <|-- VueloCreadoDTO
+    VueloServicio -- Vuelo
+```
+
 ## DTOs (Data Transfer Objects)
 
 ### VueloDTO
@@ -158,6 +211,34 @@ def calcular_prioridad_efectiva(vuelo):
     prioridad += ajuste_temporal
     
     return prioridad
+```
+
+```mermaid
+flowchart TD
+    Start([Calcular prioridad]) --> Emergency{¿Emergencia?}
+    Emergency -->|Sí| AddEmergencyPoints[Añadir 1000 puntos]
+    Emergency -->|No| CheckStatus{¿Estado?}
+    
+    AddEmergencyPoints --> CheckStatus
+    
+    CheckStatus -->|Programado| AddProgrammedPoints[Añadir 100 puntos]
+    CheckStatus -->|Retrasado| AddDelayedPoints[Añadir 50 puntos]
+    CheckStatus -->|Cancelado| SkipStatusPoints[Mantener puntos base]
+    
+    AddProgrammedPoints --> TimeCheck
+    AddDelayedPoints --> TimeCheck
+    SkipStatusPoints --> TimeCheck
+    
+    TimeCheck{¿Próximo a salir?}
+    TimeCheck -->|Ya debería haber salido| MaxTimePoints[Añadir 200 puntos]
+    TimeCheck -->|Dentro de 3 horas| CalcTimePoints[Añadir puntos proporcionales]
+    TimeCheck -->|> 3 horas| NoTimePoints[No añadir puntos temporales]
+    
+    MaxTimePoints --> FinalCalc
+    CalcTimePoints --> FinalCalc
+    NoTimePoints --> FinalCalc
+    
+    FinalCalc[Calcular prioridad final] --> End([Retornar prioridad])
 ```
 
 ## Flujos de Trabajo Principales

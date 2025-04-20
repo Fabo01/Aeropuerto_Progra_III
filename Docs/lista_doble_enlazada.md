@@ -73,7 +73,7 @@ class ListaDobleEnlazadaCentinelas(Base):
 ```python
 class NodoDobleVuelos(Base):
     __tablename__ = "NodoDobleVuelos"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary key=True, autoincrement=True)
     posicion = Column(Integer, nullable=True)
     
     # Enlaces de la lista doblemente enlazada
@@ -103,11 +103,14 @@ class Vuelo(Base):
 
 ## Diagrama Conceptual
 
-```
-+----------------+      +----------------+      +----------------+      +----------------+
-|   CENTINELA    |      |     NODO 1     |      |     NODO 2     |      |   CENTINELA    |
-|   (cabezon)    |<---->|  (vuelo_id=5)  |<---->|  (vuelo_id=8)  |<---->|    (colon)     |
-+----------------+      +----------------+      +----------------+      +----------------+
+```mermaid
+flowchart LR
+    Cabezon((Centinela\ncabezon)) <--> Nodo1[Nodo 1\nvuelo_id=5] <--> Nodo2[Nodo 2\nvuelo_id=8] <--> Colon((Centinela\ncolon))
+    
+    style Cabezon fill:#f9f,stroke:#333,stroke-width:2px
+    style Colon fill:#f9f,stroke:#333,stroke-width:2px
+    style Nodo1 fill:#bbf,stroke:#333,stroke-width:1px
+    style Nodo2 fill:#bbf,stroke:#333,stroke-width:1px
 ```
 
 ## Ventajas de esta Implementación
