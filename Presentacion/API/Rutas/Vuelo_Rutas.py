@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from Config.db import get_db
 from Presentacion.DTOs.VueloDTO import VueloDTO
+from Presentacion.DTOs.VueloCreadoDTO import VueloCreadoDTO
 from Servicios.VueloServicio import VueloServicio
 
 router = APIRouter(
@@ -12,7 +13,7 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=VueloDTO, status_code=status.HTTP_201_CREATED)
-def crear_vuelo(vuelo: VueloDTO, db: Session = Depends(get_db)):
+def crear_vuelo(vuelo: VueloCreadoDTO, db: Session = Depends(get_db)):
     servicio = VueloServicio(db)
     try:
         return servicio.crear_vuelo(vuelo)
@@ -43,6 +44,15 @@ def actualizar_vuelo(vuelo_id: int, vuelo: VueloDTO, db: Session = Depends(get_d
 @router.delete("/{vuelo_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_vuelo(vuelo_id: int, db: Session = Depends(get_db)):
     servicio = VueloServicio(db)
+    
+    # Verificar si el vuelo está en la lista
+    if servicio.vuelo_esta_en_lista(vuelo_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No se puede eliminar el vuelo porque está actualmente en la lista de programación. Extráigalo de la lista antes de eliminarlo."
+        )
+    
     if not servicio.eliminar_vuelo(vuelo_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vuelo no encontrado")
+    
     return {"message": "Vuelo eliminado correctamente"}

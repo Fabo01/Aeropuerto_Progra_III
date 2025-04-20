@@ -42,9 +42,24 @@ class VueloRepo:
             self.db.rollback()
             raise e
             
-    def eliminar_vuelo(self, vuelo_id: int) -> bool:
+    def vuelo_esta_en_lista(self, vuelo_id: int) -> bool:
+        """Verifica si un vuelo está asociado a un nodo en la lista doble"""
         vuelo = self.obtener_vuelo_por_id(vuelo_id)
         if not vuelo:
+            return False
+        
+        # Si el vuelo tiene un nodo asociado, está en la lista
+        return vuelo.lista_item is not None
+
+    def eliminar_vuelo(self, vuelo_id: int) -> bool:
+        """Elimina un vuelo si no está en la lista doble"""
+        vuelo = self.obtener_vuelo_por_id(vuelo_id)
+        if not vuelo:
+            return False
+            
+        # Verificar si el vuelo está en la lista
+        if self.vuelo_esta_en_lista(vuelo_id):
+            # No permitir eliminar vuelos que están en la lista
             return False
             
         try:
